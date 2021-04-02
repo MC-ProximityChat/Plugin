@@ -2,6 +2,7 @@ package com.proximitychat.plugin;
 
 import com.proximitychat.plugin.events.OnJoin;
 import com.proximitychat.plugin.events.OnQuit;
+import com.proximitychat.plugin.http.RequestDispatcher;
 import com.proximitychat.plugin.task.TaskScheduler;
 import com.proximitychat.plugin.task.impl.TaskSchedulerImpl;
 import org.bukkit.Bukkit;
@@ -15,11 +16,18 @@ public final class ProximityChat extends JavaPlugin {
 
     private TaskScheduler taskScheduler;
 
+    private RequestDispatcher requestDispatcher;
+
     private static ProximityChat instance;
+
+    public final int HASHED_IP = getServer().getIp().hashCode();
 
     @Override
     public void onEnable() {
         this.taskScheduler = new TaskSchedulerImpl(this);
+        this.requestDispatcher = new RequestDispatcher(HASHED_IP);
+
+        scheduleExistingPlayers();
         registerEvents();
 
         instance = this;
@@ -27,7 +35,17 @@ public final class ProximityChat extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        requestDispatcher.close();
         taskScheduler.destroy();
+    }
+
+    private void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(new OnJoin(), this);
+        Bukkit.getPluginManager().registerEvents(new OnQuit(), this);
+    }
+
+    private void scheduleExistingPlayers() {
+        Bukkit.getOnlinePlayers().forEach(p -> taskScheduler.schedule(p));
     }
 
     public static ProximityChat getInstance() {
@@ -38,8 +56,7 @@ public final class ProximityChat extends JavaPlugin {
         return taskScheduler;
     }
 
-    private void registerEvents() {
-        Bukkit.getPluginManager().registerEvents(new OnJoin(), this);
-        Bukkit.getPluginManager().registerEvents(new OnQuit(), this);
+    public RequestDispatcher getRequestDispatcher() {
+        return requestDispatcher;
     }
 }

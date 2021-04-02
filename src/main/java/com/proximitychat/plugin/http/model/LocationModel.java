@@ -6,29 +6,36 @@ import java.util.UUID;
 
 public class LocationModel {
 
-    private final UUID uuid;
+    private final UUID ID;
 
-    private final SimpleLocation simpleLocation;
+    private final double X;
+
+    private final double Z;
 
     public LocationModel(UUID uuid, SimpleLocation simpleLocation) {
-        this.uuid = uuid;
-        this.simpleLocation = simpleLocation;
+        this.ID = uuid;
+        this.X = simpleLocation.getX();
+        this.Z = simpleLocation.getZ();
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getID() {
+        return ID;
     }
 
-    public SimpleLocation getSimpleLocation() {
-        return simpleLocation;
+    public double getX() {
+        return X;
+    }
+
+    public double getZ() {
+        return Z;
     }
 
     @Override
     public String toString() {
-        return "{" +
-                "uuid: " + uuid +
-                ", x: " + simpleLocation.getX() +
-                ", z: " + simpleLocation.getZ() +
+        return '{' +
+                "\"uuid\": \"" + ID + "\"" +
+                ", \"x\": " + X +
+                ", \"z\": " + Z +
                 '}';
     }
 }
