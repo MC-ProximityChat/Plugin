@@ -49,6 +49,11 @@ public class TaskSchedulerImpl implements TaskScheduler {
         taskMap.remove(player.getUniqueId());
     }
 
+
+    public void scheduleExistingPlayers() {
+        Bukkit.getOnlinePlayers().forEach(this::schedule);
+    }
+
     public void destroy() {
         Bukkit.getScheduler().cancelTasks(plugin);
         taskMap = null;

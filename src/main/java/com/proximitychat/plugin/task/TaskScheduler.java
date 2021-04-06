@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 
 public interface TaskScheduler {
 
+    void scheduleExistingPlayers();
+
     int schedule(Player player);
 
     int cancel(Player player);

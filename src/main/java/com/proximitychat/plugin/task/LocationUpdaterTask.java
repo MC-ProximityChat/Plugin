@@ -25,7 +25,7 @@ public class LocationUpdaterTask implements Runnable {
         location.update(player);
 
         if (location.doesDistanceExceedThreshold()) {
-            ProximityChat.getInstance().getRequestDispatcher().sendRequest(LocationModelAdapter.adapt(player.getUniqueId(), location.getCurrent()));
+            ProximityChat.getInstance().getLocationRequestDispatcher().sendRequest(LocationModelAdapter.adapt(player.getUniqueId(), location.getCurrent()));
         }
     }
 }

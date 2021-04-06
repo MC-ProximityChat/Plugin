@@ -2,3 +2,6 @@ name: ProximityChat
 version: ${project.version}
 main: com.proximitychat.plugin.ProximityChat
 api-version: 1.16
+commands:
+  proximitychat:
+    description: Proximity chat!

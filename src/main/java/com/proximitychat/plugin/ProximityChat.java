@@ -1,22 +1,39 @@
 package com.proximitychat.plugin;
 
+import com.google.gson.Gson;
+import com.proximitychat.plugin.commands.ProximityChatCommand;
 import com.proximitychat.plugin.events.OnJoin;
 import com.proximitychat.plugin.events.OnQuit;
-import com.proximitychat.plugin.http.RequestDispatcher;
+import com.proximitychat.plugin.http.LocationRequestDispatcher;
+import com.proximitychat.plugin.http.Requests;
 import com.proximitychat.plugin.task.TaskScheduler;
 import com.proximitychat.plugin.task.impl.TaskSchedulerImpl;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.Dsl;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Objects;
 
 public final class ProximityChat extends JavaPlugin {
 
     public static final boolean DEBUG = true;
 
-    public static final double DISTANCE_THRESHOLD = 1.0D;
+    public static final double DISTANCE_THRESHOLD =1.0D;
+
+    public static final Gson GSON = new Gson();
 
     private TaskScheduler taskScheduler;
 
-    private RequestDispatcher requestDispatcher;
+    private AsyncHttpClient client;
+
+    private LocationRequestDispatcher requestDispatcher;
+
+    private Requests requests;
+
+    private String serverId;
+
+    private String serverName;
 
     private static ProximityChat instance;
 
@@ -25,10 +42,16 @@ public final class ProximityChat extends JavaPlugin {
     @Override
     public void onEnable() {
         this.taskScheduler = new TaskSchedulerImpl(this);
-        this.requestDispatcher = new RequestDispatcher(HASHED_IP);
+        this.client = Dsl.asyncHttpClient(Dsl.config().setRequestTimeout(500).build());
+        this.requestDispatcher = new LocationRequestDispatcher(client, HASHED_IP);
+        this.requests = new Requests(this, client);
+        this.serverName = getServer().getMotd();
 
-        scheduleExistingPlayers();
         registerEvents();
+        registerCommands();
+
+        requests.registerServerWithBackend(serverName);
+        taskScheduler.scheduleExistingPlayers();
 
         instance = this;
     }
@@ -39,13 +62,21 @@ public final class ProximityChat extends JavaPlugin {
         taskScheduler.destroy();
     }
 
+    private void registerCommands() {
+        Objects.requireNonNull(getCommand("proximitychat")).setExecutor(new ProximityChatCommand());
+    }
+
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new OnJoin(), this);
         Bukkit.getPluginManager().registerEvents(new OnQuit(), this);
     }
 
-    private void scheduleExistingPlayers() {
-        Bukkit.getOnlinePlayers().forEach(p -> taskScheduler.schedule(p));
+    public String getServerId() {
+        return serverId;
+    }
+
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
     }
 
     public static ProximityChat getInstance() {
@@ -56,7 +87,14 @@ public final class ProximityChat extends JavaPlugin {
         return taskScheduler;
     }
 
-    public RequestDispatcher getRequestDispatcher() {
+    public LocationRequestDispatcher getLocationRequestDispatcher() {
         return requestDispatcher;
+    }
+
+    public Requests getRequests() {
+        return requests;
+    }
+    public AsyncHttpClient getClient() {
+        return client;
     }
 }
