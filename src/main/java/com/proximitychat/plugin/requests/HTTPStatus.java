@@ -96,7 +96,7 @@ public enum HTTPStatus {
     /**
      * Gets HTTP Status from its appropriate status code. Also checks if its null, so you dont mess things up.
      */
-    public HTTPStatus from(int statusCode) {
+    public static HTTPStatus from(int statusCode) {
         HTTPStatus status = getStatusFrom(statusCode);
 
         if (status == null)
@@ -108,7 +108,7 @@ public enum HTTPStatus {
     /**
      * Performs logic for getting HTTP Status from its appropriate status code.
      */
-    private HTTPStatus getStatusFrom(int statusCode) {
+    private static HTTPStatus getStatusFrom(int statusCode) {
         for (HTTPStatus s : values()) {
             if (s.getCode() == statusCode)
                 return s;

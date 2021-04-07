@@ -9,7 +9,7 @@ public class RestResponse<S extends CommandSender, T extends ResponseBody> {
 
     private final S sender;
 
-    private final int statusCode;
+    private final HTTPStatus statusCode;
 
     private final Map<String, String> headers;
 
@@ -17,7 +17,7 @@ public class RestResponse<S extends CommandSender, T extends ResponseBody> {
 
     private final String bodyStr;
 
-    private RestResponse(S sender, int statusCode, Map<String, String> headers, T body, String bodyStr) {
+    private RestResponse(S sender, HTTPStatus statusCode, Map<String, String> headers, T body, String bodyStr) {
         this.sender = sender;
         this.statusCode = statusCode;
         this.headers = headers;
@@ -33,7 +33,7 @@ public class RestResponse<S extends CommandSender, T extends ResponseBody> {
         return sender;
     }
 
-    public int getStatusCode() {
+    public HTTPStatus getStatusCode() {
         return statusCode;
     }
 
@@ -56,7 +56,7 @@ public class RestResponse<S extends CommandSender, T extends ResponseBody> {
 
         private final Class<T> clazz;
 
-        private int statusCode;
+        private HTTPStatus statusCode;
 
         private Map<String, String> headers;
 
@@ -70,7 +70,7 @@ public class RestResponse<S extends CommandSender, T extends ResponseBody> {
         }
 
         public Builder<S, T> statusCode(int statusCode) {
-            this.statusCode = statusCode;
+            this.statusCode = HTTPStatus.from(statusCode);
             return this;
         }
 
