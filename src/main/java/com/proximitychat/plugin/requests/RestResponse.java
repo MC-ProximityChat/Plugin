@@ -4,6 +4,7 @@ import com.proximitychat.plugin.ProximityChat;
 import org.bukkit.command.CommandSender;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 public class RestResponse<S extends CommandSender, T extends ResponseBody> {
 
@@ -89,11 +90,9 @@ public class RestResponse<S extends CommandSender, T extends ResponseBody> {
             return ProximityChat.GSON.fromJson(bodyStr, clazz);
         }
 
-
         public RestResponse<S, T> build() {
             return new RestResponse<>(sender, statusCode, headers, body, bodyStr);
         }
-
 
     }
 }

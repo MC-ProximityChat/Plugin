@@ -1,28 +1,20 @@
 package com.proximitychat.plugin.requests;
 
-import com.google.gson.JsonSyntaxException;
-import com.proximitychat.plugin.ProximityChat;
+import com.proximitychat.plugin.requests.requests.JoinServerRequest;
 import com.proximitychat.plugin.requests.requests.ServerInformationRequest;
 import com.proximitychat.plugin.requests.routes.Routes;
-import com.proximitychat.plugin.util.MessageUtil;
-import org.asynchttpclient.*;
-import org.asynchttpclient.util.HttpConstants;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.Dsl;
 
 public class Requests {
 
     public static final AsyncHttpClient client = Dsl.asyncHttpClient(Dsl.config().setRequestTimeout(500).build());
+
     public static class Server {
-        public static <S extends CommandSender> void SERVER_INFORMATION(S sender, ServerInformationRequest.Request request) {
-            new ServerInformationRequest(client, Routes.Server.informationUrl()).execute(sender, request);
-        }
+
+        public static ServerInformationRequest SERVER_INFORMATION = new ServerInformationRequest(client, Routes.Server.informationUrl());
+
+        public static JoinServerRequest JOIN_SERVER = new JoinServerRequest(client, Routes.Server.informationUrl());
     }
 //    private final ProximityChat plugin;
 //

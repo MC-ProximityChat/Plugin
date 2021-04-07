@@ -8,6 +8,7 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import org.asynchttpclient.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,6 +58,10 @@ public abstract class RestRequest<B extends RequestBody, T extends ResponseBody>
 
     protected abstract void registerListeners();
 
+    protected void registerPlayerListener(Consumer<RestResponse<Player, T>> listener) {
+
+    }
+
     protected void registerListener(Consumer<RestResponse<? extends CommandSender, T>> listener) {
         listeners.add(listener);
     }
@@ -85,7 +90,6 @@ public abstract class RestRequest<B extends RequestBody, T extends ResponseBody>
             @Override
             public State onStatusReceived(HttpResponseStatus responseStatus) throws Exception {
                 responseBuilder.statusCode(responseStatus.getStatusCode());
-                sender.sendMessage("PENIS");
                 return State.CONTINUE;
             }
 
@@ -136,5 +140,9 @@ public abstract class RestRequest<B extends RequestBody, T extends ResponseBody>
                 }, service));
 
         return responseFuture;
+    }
+
+    public ExecutorService getService() {
+        return service;
     }
 }

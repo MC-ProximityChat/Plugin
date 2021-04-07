@@ -52,7 +52,7 @@ public final class ProximityChat extends JavaPlugin {
 
         instance = this;
 
-        Requests.Server.SERVER_INFORMATION(getServer().getConsoleSender(), new ServerInformationRequest.Request(serverName));
+        Requests.Server.SERVER_INFORMATION.execute(getServer().getConsoleSender(), new ServerInformationRequest.Request(serverName));
     }
 
     @Override
