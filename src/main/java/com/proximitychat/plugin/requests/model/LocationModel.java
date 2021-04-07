@@ -1,4 +1,4 @@
-package com.proximitychat.plugin.http.model;
+package com.proximitychat.plugin.requests.model;
 
 import com.proximitychat.plugin.location.SimpleLocation;
 

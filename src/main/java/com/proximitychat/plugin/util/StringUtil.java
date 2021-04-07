@@ -9,4 +9,8 @@ public class StringUtil {
         }
         return builder.toString();
     }
+
+    public static String appendIfNotExists(String str, String toAppend) {
+        return str.endsWith(toAppend) ? str : str + toAppend;
+    }
 }

@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.proximitychat.plugin.commands.ProximityChatCommand;
 import com.proximitychat.plugin.events.OnJoin;
 import com.proximitychat.plugin.events.OnQuit;
-import com.proximitychat.plugin.http.LocationRequestDispatcher;
-import com.proximitychat.plugin.http.Requests;
+import com.proximitychat.plugin.requests.LocationRequestDispatcher;
+import com.proximitychat.plugin.requests.Requests;
+import com.proximitychat.plugin.requests.requests.ServerInformationRequest;
 import com.proximitychat.plugin.task.TaskScheduler;
 import com.proximitychat.plugin.task.impl.TaskSchedulerImpl;
 import org.asynchttpclient.AsyncHttpClient;
@@ -29,8 +30,6 @@ public final class ProximityChat extends JavaPlugin {
 
     private LocationRequestDispatcher requestDispatcher;
 
-    private Requests requests;
-
     private String serverId;
 
     private String serverName;
@@ -44,16 +43,16 @@ public final class ProximityChat extends JavaPlugin {
         this.taskScheduler = new TaskSchedulerImpl(this);
         this.client = Dsl.asyncHttpClient(Dsl.config().setRequestTimeout(500).build());
         this.requestDispatcher = new LocationRequestDispatcher(client, HASHED_IP);
-        this.requests = new Requests(this, client);
         this.serverName = getServer().getMotd();
 
         registerEvents();
         registerCommands();
 
-        requests.registerServerWithBackend(serverName);
         taskScheduler.scheduleExistingPlayers();
 
         instance = this;
+
+        Requests.Server.SERVER_INFORMATION(getServer().getConsoleSender(), new ServerInformationRequest.Request(serverName));
     }
 
     @Override
@@ -91,9 +90,6 @@ public final class ProximityChat extends JavaPlugin {
         return requestDispatcher;
     }
 
-    public Requests getRequests() {
-        return requests;
-    }
     public AsyncHttpClient getClient() {
         return client;
     }

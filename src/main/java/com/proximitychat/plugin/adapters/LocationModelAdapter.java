@@ -1,6 +1,6 @@
 package com.proximitychat.plugin.adapters;
 
-import com.proximitychat.plugin.http.model.LocationModel;
+import com.proximitychat.plugin.requests.model.LocationModel;
 import com.proximitychat.plugin.location.SimpleLocation;
 
 import java.util.UUID;

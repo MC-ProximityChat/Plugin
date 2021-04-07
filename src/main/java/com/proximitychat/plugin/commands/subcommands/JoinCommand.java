@@ -2,18 +2,13 @@ package com.proximitychat.plugin.commands.subcommands;
 
 import com.proximitychat.plugin.ProximityChat;
 import com.proximitychat.plugin.commands.AbstractSubCommand;
-import com.proximitychat.plugin.http.Requests;
-import com.proximitychat.plugin.util.MessageUtil;
 import com.proximitychat.plugin.util.StringUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import org.asynchttpclient.ListenableFuture;
-import org.asynchttpclient.Response;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class JoinCommand extends AbstractSubCommand {
@@ -25,21 +20,20 @@ public class JoinCommand extends AbstractSubCommand {
     @Override
     public void executePlayer(Player player, List<String> args) {
         final String url = buildUrl(ProximityChat.getInstance().getServerId());
-        Requests requests = ProximityChat.getInstance().getRequests();
 
-        AtomicReference<Player> playerSupplier = new AtomicReference<>(player);
-
-        ListenableFuture<Response> response = requests.registerNewPlayer(player.getUniqueId());
-
-        response.addListener(() -> {
-            try {
-                String body = response.get().getResponseBody();
-                ServerResponse serverResponse = ProximityChat.GSON.fromJson(body, ServerResponse.class);
-                sendJoinMessage(playerSupplier, url, serverResponse.code, serverResponse.expirationPolicy, serverResponse.alreadyGenerated);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }, requests.getExecutorService());
+//        AtomicReference<Player> playerSupplier = new AtomicReference<>(player);
+//
+//        ListenableFuture<Response> response = requests.registerNewPlayer(player.getUniqueId());
+//
+//        response.addListener(() -> {
+//            try {
+//                String body = response.get().getResponseBody();
+//                ServerResponse serverResponse = ProximityChat.GSON.fromJson(body, ServerResponse.class);
+//                sendJoinMessage(playerSupplier, url, serverResponse.code, serverResponse.expirationPolicy, serverResponse.alreadyGenerated);
+//            } catch (InterruptedException | ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }, requests.getExecutorService());
     }
 
     private String buildUrl(String id) {

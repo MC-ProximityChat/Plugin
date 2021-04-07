@@ -1,11 +1,8 @@
-package com.proximitychat.plugin.http;
+package com.proximitychat.plugin.requests;
 
-import com.proximitychat.plugin.ProximityChat;
-import com.proximitychat.plugin.http.model.LocationModel;
-import com.proximitychat.plugin.util.MessageUtil;
+import com.proximitychat.plugin.requests.model.LocationModel;
 import org.asynchttpclient.*;
 import org.asynchttpclient.util.HttpConstants;
-import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
